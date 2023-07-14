@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator');
 const Applicant = require('../models/applicant');
 const Event = require('../models/event');
 
+//ROUTE 1: TO GET ALL EVENTS
 router.get('/', async (req, res) => {
     try {
         const events = await Event.find({})
@@ -13,6 +14,7 @@ router.get('/', async (req, res) => {
     }  
 })
 
+//ROUTE 3: TO REGISTER APPLICANT
 router.post('/register', [
     body('email', 'Enter a valid name').isEmail()
 ], async (req, res) => {
@@ -39,7 +41,7 @@ router.post('/register', [
 
         res.json(req.body)
     } catch (error) {
-        console.log("error.msg")
+        console.log(error.message)
         return res.status(500).send({ errors: "Some error occured" })
     }
 })

@@ -30,6 +30,10 @@ const committeeSchema = new mongoose.Schema({
     team: {
         type: [String]
     },
+    events: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Event'
+    }],
     sponsors: {
         type: [String]
     }

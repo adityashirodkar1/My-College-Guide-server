@@ -25,10 +25,6 @@ const eventSchema = new mongoose.Schema({
     date: {
         type: Date,
         required: true
-    },
-    committeeId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Committee'
     }
 })
 

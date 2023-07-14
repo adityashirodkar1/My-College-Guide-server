@@ -13,21 +13,25 @@ mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
 eveObj = [
     {
         title: 'Foodgasm',
+        description: 'asasasas',
         type: 'Social',
         date: new Date('2023-07-21')
     },
     {
         title: 'Hackathon',
+        description: 'asasasas',
         type: 'Techincal',
         date: new Date('2023-08-12')
     },
     {
-        title: 'Concert',
-        type: 'Cultural',
-        date: new Date('2023-08-22')
+        title: Concert,
+        type: Cultural,
+        description: "asasasaaaaaaaaaaaaaaaaaaaaa",
+        date: "2023-08-22"
     },
     {
         title: 'Dance Dilse',
+        description: 'asasasas',
         type: 'Cultural',
         date: new Date('2023-07-17')
     }
@@ -38,3 +42,13 @@ try {
 } catch (error) {
     console.log('Error'+error)
 }
+
+const deletePls = async () => {
+    try {
+        await Event.deleteMany({});
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// deletePls();

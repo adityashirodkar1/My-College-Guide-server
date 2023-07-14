@@ -10,6 +10,7 @@ router.get('/', (req,res) => {
     res.send('Hey')
 })
 
+// Authentication of committee (admin)
 router.post('/adminlogin', [
     body("username", "Username can't be blank").exists(),
     body("password", "Password can't be blank").exists()
