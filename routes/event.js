@@ -8,14 +8,14 @@ const Event = require('../models/event');
 router.get('/', async (req, res) => {
     try {
         const events = await Event.find({})
-        res.send({ status: "ok", data: events })
+        res.send(events)
     } catch (error) {
         console.log(`Error in backend: ${error}`)
     }  
 })
 
 //ROUTE 3: TO REGISTER APPLICANT
-router.post('/register', [
+router.post('/register/:id', [
     body('email', 'Enter a valid name').isEmail()
 ], async (req, res) => {
     const errors = validationResult(req);

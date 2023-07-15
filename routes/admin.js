@@ -36,6 +36,7 @@ router.post('/addEvent', adminAuthenticate, [
         return res.status(400).json({ errors: errors.array() })
     try {
         const committee = await Committee.findById(req.committee.id);
+        req.body.committee = committee.name
         const event = new Event(req.body);
         committee.events.push(event);
         await event.save();

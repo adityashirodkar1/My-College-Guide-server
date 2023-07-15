@@ -25,6 +25,9 @@ const eventSchema = new mongoose.Schema({
     date: {
         type: Date,
         required: true
+    },
+    committee: {
+        type: String,
     }
 })
 

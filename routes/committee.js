@@ -5,9 +5,27 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const Committee = require('../models/committee');
 const JWT_SECRET = 'oculusisworsethanmydick$hahaxd';
+const mongoose = require('mongoose')
 
 router.get('/', (req,res) => {
     res.send('Hey')
+})
+
+router.get('/:id', async (req,res) => {
+    try {
+        const comId = req.params.id
+        let committee = {}
+        const committees = await Committee.find({});
+        for (let com of committees){
+            if (com.events.indexOf(comId) !== -1){
+                committee = com
+            }
+        }
+        res.send(committee)
+    } catch (error) {
+        console.log(error.message)
+        return res.status(500).send({ errors: "Server Error" })
+    }
 })
 
 // Authentication of committee (admin)
