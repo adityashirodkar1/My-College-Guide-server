@@ -4,6 +4,7 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const Event = require('../models/event');
 const Committee = require('../models/committee');
+const Team = require('../models/team');
 
 router.get('/', adminAuthenticate, (req,res) => {
     res.send('Hey')
@@ -52,6 +53,31 @@ router.post('/addEvent', adminAuthenticate, [
 // router.put('/editEvent/:id', adminAuthenticate, async (req,res) => {
 
 // })
+
+//ROUTE 5: Craete a Team
+router.post('/team/:id', adminAuthenticate, async (req,res) => {
+    try {
+        
+        const committee = await Committee.findById(req.params.id)
+        let str = ""
+        let obj = req.body
+        console.log(obj)
+        for (let key in obj){
+            str = req.body[key]
+            let arr = str.split('-')
+            console.log(key)
+            req.body[key] = arr
+        }
+        const team = new Team(req.body);
+        team.save();
+        committee.team = team
+        committee.save();
+        res.send(team)
+        
+    } catch (error) {
+        return res.status(500).send({ errors: "Interval Server Error" })
+    }
+})
 
 
 module.exports = router;

@@ -4,8 +4,10 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const Committee = require('../models/committee');
+const Event = require('../models/event');
 const JWT_SECRET = 'oculusisworsethanmydick$hahaxd';
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Team = require('../models/team');
 
 router.get('/', (req,res) => {
     res.send('Hey')
@@ -13,14 +15,33 @@ router.get('/', (req,res) => {
 
 router.get('/:id', async (req,res) => {
     try {
-        const comId = req.params.id
+        const eveId = req.params.id
         let committee = {}
+        let events = []
         const committees = await Committee.find({});
         for (let com of committees){
-            if (com.events.indexOf(comId) !== -1){
+            if (com.events.indexOf(eveId) !== -1){ 
                 committee = com
             }
         }
+        for (let eveId of committee.events){
+            let event = await Event.findById(eveId)
+            events.push(event.title)
+        }
+
+        let com = JSON.parse(JSON.stringify(committee));
+        com.eve = events
+        res.send(com)
+    } catch (error) {
+        console.log(error.message)
+        return res.status(500).send({ errors: "Server Error" })
+    }
+})
+
+router.get('/with/:id', async (req,res) => {
+    try {
+        const eveId = req.params.id
+        const committee = await Committee.findById(eveId)
         res.send(committee)
     } catch (error) {
         console.log(error.message)
@@ -86,13 +107,8 @@ router.post('/add', async (req,res) => {
         req.body.password = secPass
 
         //String to Array
-        teamStr = req.body.team
-        sponsorStr = req.body.sponsors
-        team = teamStr.split('-')
-        sponsors = sponsorStr.split('-')
 
         //Updating Request Body
-        req.body.team = team
         req.body.sponsors = sponsors
 
         committee = new Committee(req.body)
@@ -110,6 +126,16 @@ router.post('/add', async (req,res) => {
     } catch (error) {
         console.log(error.message)
         return res.status(500).send({ errors: "Some error occured" })
+    }
+})
+
+//Get team
+router.get('/team/:id', async (req,res) => {
+    try {
+        const team = await Team.findOne({committeeId: req.params.id})
+        res.json(team)
+    } catch (error) {
+        return res.status(500).send({ errors: "Internal Server Error" })
     }
 })
 

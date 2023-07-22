@@ -3,11 +3,28 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const Applicant = require('../models/applicant');
 const Event = require('../models/event');
+const Committee = require('../models/committee');
 
 //ROUTE 1: TO GET ALL EVENTS
 router.get('/', async (req, res) => {
     try {
         const events = await Event.find({})
+        res.send(events)
+    } catch (error) {
+        console.log(`Error in backend: ${error}`)
+    }  
+})
+
+router.get('/:id', async (req, res) => {
+    try {
+        const id = req.params.id
+        const committee = await Committee.findById(id);
+        const eventIds = committee.events
+        let events = []
+        for (let eveId of eventIds){
+            let event = await Event.findById(eveId);
+            events.push(event)
+        }
         res.send(events)
     } catch (error) {
         console.log(`Error in backend: ${error}`)

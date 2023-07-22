@@ -15,6 +15,9 @@ const committeeSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    logo: {
+        type: String
+    },
     description: {
         type: String
     },
@@ -27,13 +30,13 @@ const committeeSchema = new mongoose.Schema({
     password: {
         type: String
     },
-    team: {
-        type: [String]
-    },
     events: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event'
     }],
+    team: {
+        type: mongoose.Schema.Types.Mixed,
+    },
     sponsors: {
         type: [String]
     }
