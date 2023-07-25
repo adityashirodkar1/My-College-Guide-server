@@ -11,7 +11,7 @@ mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
 
 const teamSchema = new mongoose.Schema({
     chairperson: {
-        type: mongoose.Schema.Types.Mixed
+        type: [mongoose.Schema.Types.Mixed]
     },
     viceChairperson: {
         type: [mongoose.Schema.Types.Mixed]

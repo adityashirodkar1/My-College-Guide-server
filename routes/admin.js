@@ -10,17 +10,46 @@ router.get('/', adminAuthenticate, (req,res) => {
     res.send('Hey')
 })
 
-router.get('/fetchEvents', adminAuthenticate, async (req,res) => {
+//ROUTE 1: Get Committee
+router.get('/committee/:id', async (req,res) => {
     try {
-        const committee = await Committee.findById(req.committee.id);
+        const { id } = req.params
+        // if (id !== req.committee.id){
+        //     return res.status(401).send({ errors: "Invalid Login" })
+        // }
         let events = []
-        for (let eventId of committee.events){
-            let event = await Event.findById(eventId)
-            events.push(event)
+        let eventobj = {}
+        const committee = await Committee.findById(id);
+        for (let eveId of committee.events){
+            let event = await Event.findById(eveId)
+            eventobj.name = event.title
+            eventobj.eventId = eveId
+            events.push(eventobj)
+            eventobj = {}
         }
-        res.send(events)
+
+        let com = JSON.parse(JSON.stringify(committee));
+        com.eve = events
+
+
+        res.send(com)
     } catch (error) {
-        return res.status(500).send({ errors: "Some error occured" })
+        return res.status(500).send({ errors: "Internal Server Occurred" })
+    }
+})
+
+//ROUTE 2: Fetch Event of committee
+router.get('/events/:id', async (req,res) => {
+    try {
+        const { id } = req.params
+        // if (id !== req.committee.id){
+        //     return res.status(401).send({ errors: "Invalid Login" })
+        // }
+        const event = await Event.findById(id);
+
+        res.send(event)
+    } catch (error) {
+        return res.status(500).send({ errors: "Internal Server Occurred" })
     }
 })
 
@@ -49,12 +78,28 @@ router.post('/addEvent', adminAuthenticate, [
     }
 })
 
-//ROUTE 4: To UPDATE an existing Event
+// //ROUTE 4: To UPDATE an existing Event
 // router.put('/editEvent/:id', adminAuthenticate, async (req,res) => {
 
 // })
 
-//ROUTE 5: Craete a Team
+//ROUTE 5: To EDIT an existing Committee
+router.put('/committee/:id', adminAuthenticate, async (req,res) => {
+    try {
+        
+        const { id } = req.params
+        if (id !== req.committee.id){
+            return res.status(401).send({ errors: "Invalid Login" })
+        }
+        const committee = await Committee.findByIdAndUpdate(id, req.body, { runValidators: true, new: true })
+        res.send(committee)
+
+    } catch (error) {
+        return res.status(500).send({ errors: "Interval Server Error" })
+    }
+})
+
+//ROUTE 6: Craete a Team
 router.post('/team/:id', adminAuthenticate, async (req,res) => {
     try {
         

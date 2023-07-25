@@ -18,6 +18,7 @@ router.get('/:id', async (req,res) => {
         const eveId = req.params.id
         let committee = {}
         let events = []
+        let eventobj = {}
         const committees = await Committee.find({});
         for (let com of committees){
             if (com.events.indexOf(eveId) !== -1){ 
@@ -26,7 +27,10 @@ router.get('/:id', async (req,res) => {
         }
         for (let eveId of committee.events){
             let event = await Event.findById(eveId)
-            events.push(event.title)
+            eventobj.name = event.title
+            eventobj.eventId = eveId
+            events.push(eventobj)
+            eventobj = {}
         }
 
         let com = JSON.parse(JSON.stringify(committee));
