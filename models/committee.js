@@ -39,6 +39,9 @@ const committeeSchema = new mongoose.Schema({
     },
     sponsors: {
         type: [String]
+    },
+    posters: {
+        type: [String]
     }
 })
 

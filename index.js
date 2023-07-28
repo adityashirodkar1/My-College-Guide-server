@@ -21,6 +21,7 @@ app.use(express.json())
 app.use('/api/events', require('./routes/event'))
 app.use('/api/committees', require('./routes/committee'))
 app.use('/api/admin', require('./routes/admin'))
+app.use('/api/posters', require('./routes/poster'))
 
 app.listen(5000, () => {
     console.log(`Listening at http://localhost:5000`)

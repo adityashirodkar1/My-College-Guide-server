@@ -9,8 +9,9 @@ const JWT_SECRET = 'oculusisworsethanmydick$hahaxd';
 const mongoose = require('mongoose');
 const Team = require('../models/team');
 
-router.get('/', (req,res) => {
-    res.send('Hey')
+router.get('/', async (req,res) => {
+    const committee = await Committee.find({}).select(['name', 'events'])
+    res.send(committee)
 })
 
 router.get('/:id', async (req,res) => {
@@ -42,10 +43,11 @@ router.get('/:id', async (req,res) => {
     }
 })
 
+//get committee with id
 router.get('/with/:id', async (req,res) => {
     try {
-        const eveId = req.params.id
-        const committee = await Committee.findById(eveId)
+        const comId = req.params.id
+        const committee = await Committee.findById(comId)
         res.send(committee)
     } catch (error) {
         console.log(error.message)
@@ -66,15 +68,16 @@ router.post('/adminlogin', [
     const { username , password } = req.body
     
     try {
+        let success = false;
         let committee = await Committee.findOne({username})
         if(!committee){
-            return res.status(400).json({error: "Invalid Username or Password"})
+            return res.status(400).json({ success, error: "Invalid Username or Password"})
         }
-        
-        console.log(committee.username)
-        const passwordCompare = bcrypt.compare(password, committee.password)
+        console.log(password)
+        const passwordCompare = await bcrypt.compare(password, committee.password)
+        console.log(passwordCompare)
         if(!passwordCompare){
-            return res.status(400).json({error: "Invalid Username or Password"})
+            return res.status(400).json({ success, error: "Invalid Username or Password"})
         }
 
         const data = {
@@ -84,7 +87,8 @@ router.post('/adminlogin', [
         }
         const authtoken = jwt.sign(data, JWT_SECRET);
         
-        res.json({authtoken})
+        success = true
+        res.json({success,authtoken})
 
     } catch (error) {
         console.log(error.message)
@@ -142,5 +146,10 @@ router.get('/team/:id', async (req,res) => {
         return res.status(500).send({ errors: "Internal Server Error" })
     }
 })
+
+router.get('/posters', async (req,res) => {
+    res.send("de")
+})
+
 
 module.exports = router;

@@ -5,18 +5,20 @@ const { body, validationResult } = require('express-validator');
 const Event = require('../models/event');
 const Committee = require('../models/committee');
 const Team = require('../models/team');
+const Poster = require('../models/poster');
+
 
 router.get('/', adminAuthenticate, (req,res) => {
     res.send('Hey')
 })
 
 //ROUTE 1: Get Committee
-router.get('/committee/:id', async (req,res) => {
+router.get('/committee/:id', adminAuthenticate, async (req,res) => {
     try {
         const { id } = req.params
-        // if (id !== req.committee.id){
-        //     return res.status(401).send({ errors: "Invalid Login" })
-        // }
+        if (id !== req.committee.id){
+            return res.status(401).send({ errors: "Invalid Login" })
+        }
         let events = []
         let eventobj = {}
         const committee = await Committee.findById(id);
@@ -39,7 +41,7 @@ router.get('/committee/:id', async (req,res) => {
 })
 
 //ROUTE 2: Fetch Event of committee
-router.get('/events/:id', async (req,res) => {
+router.get('/events/:id', adminAuthenticate, async (req,res) => {
     try {
         const { id } = req.params
         // if (id !== req.committee.id){
@@ -122,6 +124,12 @@ router.post('/team/:id', adminAuthenticate, async (req,res) => {
     } catch (error) {
         return res.status(500).send({ errors: "Interval Server Error" })
     }
+})
+
+router.post('/addposter', async (req,res) => {
+    const poster = new Poster(req.body)
+    poster.save();
+    res.send(poster)
 })
 
 

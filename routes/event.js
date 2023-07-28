@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator');
 const Applicant = require('../models/applicant');
 const Event = require('../models/event');
 const Committee = require('../models/committee');
+const Poster = require('../models/poster');
 
 //ROUTE 1: TO GET ALL EVENTS
 router.get('/', async (req, res) => {
