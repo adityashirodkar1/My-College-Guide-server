@@ -16,6 +16,18 @@ router.get('/', async (req, res) => {
     }  
 })
 
+//ROUTE 2: TO GET EVENT BY NAME
+router.get('/name/:title', async (req, res) => {
+    try {
+        // let events = []
+        const events = await Event.find({title: req.params.title})
+        // events.push(event)
+        res.send(events)
+    } catch (error) {
+        console.log(`Error in backend: ${error}`)
+    }  
+})
+
 router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id
@@ -53,9 +65,9 @@ router.post('/register/:id', [
         //     email: req.body.email,
         //     event: req.body.event,
         // })
-
-        // applicant = new Applicant(req.body)
-        // applicant.save()
+        req.body.eventId = req.params.id
+        applicant = new Applicant(req.body)
+        applicant.save()
 
         res.json(req.body)
     } catch (error) {
