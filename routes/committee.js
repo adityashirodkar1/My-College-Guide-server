@@ -11,7 +11,7 @@ const Team = require('../models/team');
 
 router.get('/', async (req,res) => {
     const committee = await Committee.find({}).select(['name', 'events'])
-    res.send(committee)
+    res.json(committee)
 })
 
 router.get('/:id', async (req,res) => {
