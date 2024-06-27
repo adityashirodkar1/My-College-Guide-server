@@ -5,7 +5,7 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const Committee = require('../models/committee');
 const Event = require('../models/event');
-const JWT_SECRET = 'oculusisworsethanmydick$hahaxd';
+const JWT_SECRET = '$hahaxd';
 const mongoose = require('mongoose');
 const Team = require('../models/team');
 
