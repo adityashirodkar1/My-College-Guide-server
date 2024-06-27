@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'oculusisworsethanmydick$hahaxd';
+const JWT_SECRET = '$hahaxd';
 
 const adminAuthenticate = (req,res,next) => {
     let token = req.header('auth-token')
